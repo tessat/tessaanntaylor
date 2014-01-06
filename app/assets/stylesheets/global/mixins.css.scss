@@ -1,0 +1,77 @@
+
+
+@mixin box-shadow($inset, $x, $y, $blur, $size, $color) {
+	-webkit-box-shadow: #{$inset} $x $y $blur $size $color;
+     -moz-box-shadow: #{$inset} $x $y $blur $size $color;
+          box-shadow: #{$inset} $x $y $blur $size $color;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+       -o-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin blur($px) {
+	-webkit-filter: blur($px);
+     -moz-filter: blur($px);
+      -ms-filter: blur($px);
+       -o-filter: blur($px);
+          filter: blur($px);
+}
+
+@mixin ff-blur($px, $color) {
+	@include box-shadow('', 0px, 0px, $px, $px, $color);
+}
+
+@mixin background-size($percent) {
+	-webkit-background-size: $percent;
+     -moz-background-size: $percent;
+       -o-background-size: $percent;
+          background-size: $percent;
+}
+
+@mixin background-image-scale($img, $percent:100%) {
+	background: image-url(#{$img}) no-repeat scroll center center; 
+	@include background-size($percent);
+}
+
+@mixin circle($size) {
+	display:block;
+	height:$size;
+	width:$size;
+	@include border-radius($size);
+}
+
+
+// Animations
+
+@mixin transform($rule) {
+	-webkit-transform: #{$rule};
+     -moz-transform: #{$rule}; 
+      -ms-transform: #{$rule}; 
+       -o-transform: #{$rule};
+          transform: #{$rule};
+}
+
+@mixin transform-origin($x, $y, $z:0) {
+	-webkit-transform-origin: #{$x} #{$y} #{$z};
+     -moz-transform-origin: #{$x} #{$y} #{$z}; 
+      -ms-transform-origin: #{$x} #{$y} #{$z}; 
+       -o-transform-origin: #{$x} #{$y} #{$z};
+          transform-origin: #{$x} #{$y} #{$z};
+}
+
+@mixin transition($property, $duration, $function, $delay:0s) {	
+  -webkit-transition: $property $duration $function $delay; 
+     -moz-transition: $property $duration $function $delay; 
+       -o-transition: $property $duration $function $delay; 
+          transition: $property $duration $function $delay; 
+}
+
+
+
+
+

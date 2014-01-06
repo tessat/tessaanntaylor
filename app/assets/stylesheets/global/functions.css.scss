@@ -1,0 +1,6 @@
+@function make-rgba($color, $opacity){
+	$r: red($color);
+	$g: green($color);
+	$b: blue($color);
+  @return rgba($r, $g, $b, $opacity);
+}
