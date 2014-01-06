@@ -74,10 +74,10 @@ function isScrolling(base, e) {
 		if ($(base).find('.links').scrollTop() == scrollTop) {
 			clearInterval(inter);
 		}
-		doScrolling(base);
+		console.log($('.links').scrollTop());
 		
 		scrollTop = $(base).find('.links').scrollTop();
-	}, 100);
+	}, 50);
 }
 
 function doScrolling(base) {
@@ -134,24 +134,30 @@ function setFixed(base) {
 			}
 		}
 	}
+	
 	// Set the fixed values
 	if (current.length > 0) {
-		console.log(current);
-		if ($(current).hasClass('y') && (xfixed == false)) {
+		if ($(current).hasClass('y')) {
 			yfixed = false;
-			xfixed = $(base).find('.links').scrollLeft();
-		} else if ($(current).hasClass('x') && (yfixed == false)) {
-			yfixed = $(base).find('.links').scrollTop();
+			xfixed = true;
+		} else if ($(current).hasClass('x')) {
+			yfixed = true;
 			xfixed = false;
 		}
 	}
 }
 
 function fixScroll(base) {
-	if (yfixed) {
-		$(base).find('.links').scrollTop(yfixed);
-	}
+	// if (yfixed) {
+	// 	$(base).find('.links').css({
+	// 		"overflow-y": "hidden",
+	// 		"overflow-x": "scroll"
+	// 	});
+	// }
 	if (xfixed) {
-		$(base).find('.links').scrollLeft(xfixed);
+		$(base).find('.links').css({
+			"overflow-y": "scroll",
+			"overflow-x": "hidden"
+		});
 	}
 }

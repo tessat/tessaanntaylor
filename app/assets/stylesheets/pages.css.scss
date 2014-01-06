@@ -32,7 +32,7 @@
 		z-index:2000;
 		.current {
 			display:block;
-			@include circle(13px);
+			@include circle(14px);
 			background:#fff;
 			position:absolute;
 			top:0px;
