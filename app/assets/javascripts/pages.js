@@ -1,15 +1,13 @@
-
-
-
-
 // ***************
 // Variables
 // ***************
 
-var scrollTop;
-var inter;
+var base;
 
 var maxScroll;
+
+var scrollTop;
+var deltaY = 0;
 
 var yfixed = false;
 var xfixed = false;
@@ -17,6 +15,9 @@ var minScrollTop;
 var maxScrollTop;
 var minScrollLeft;
 var maxScrollLeft;
+var xScrollDirection;
+
+
 
 // ***************
 // Events
@@ -24,17 +25,16 @@ var maxScrollLeft;
 
 
 $('.pages.index').ready(function() {
-	var base = $('.pages.index');
+	base = $('.pages.index');
 	
-	setupScroll(base);
-	
+	setupScroll();
 	
 	$(base).find('.scroll-content').on('scroll', function(e) {
-		doScrolling(base);
+		doScrolling();
 	});
 	
 	$(window).on('resize', function() {
-		setupBoard(base);
+		setupBoard();
 	});
 	
 	
@@ -50,35 +50,21 @@ $('.pages.index').ready(function() {
 // Functions
 // ***************
 
-function setupScroll(base) {
+function setupScroll() {
 	// Setup the board
-	setupBoard(base);
+	setupBoard();
+	
 	// Start scroll at center
 	$(base).find('.scroll-content').scrollLeft($(base).find('.scroll-content')[0].scrollWidth/4);
 	
+	// Set current scrollTop
+	scrollTop = $(base).find('.scroll-content').scrollTop();
+	
 	// Set the max scroll
-	setMaxScroll(base);
+	setMaxScroll();
 	
 	// Set initial fixed settings
-	updateFixed(base);
-	
-	// Setup the path
-	var offset = 50;
-	$(base).find('.scrollbar hr').each(function() {
-		if ($(this).hasClass('y')) {
-			$(this).css('width', $(this).attr('data-l')+"%");
-			$(this).css('top', offset+"%");
-		} else if ($(this).hasClass('x')) {
-			$(this).css('height', $(this).attr('data-l')+"%");
-			if ($(this).hasClass('r')) {
-				offset -= parseInt($(this).attr('data-l'))-3;
-				$(this).css('top', offset+"%");
-			} else if ($(this).hasClass('l')) {
-				$(this).css('top', offset+"%");
-				offset += parseInt($(this).attr('data-l'))-4;
-			}
-		}
-	});
+	updateFixed();
 	
 	// Setup the current scroller
 	$(base).find('.scrollbar .current').css({
@@ -88,24 +74,21 @@ function setupScroll(base) {
 	
 }
 
-function isScrolling(base, e) {
-	inter = setInterval(function() {
-		if ($(base).find('.links').scrollTop() == scrollTop) {
-			clearInterval(inter);
-		}
-		console.log($('.links').scrollTop());
-		
-		scrollTop = $(base).find('.links').scrollTop();
-	}, 50);
-}
-
-function doScrolling(base) {
+function doScrolling() {
+	// Update scroll data
+	updateScrollData();
+	
 	// Update the font-size (for parallax)
-	updateParallax(base);
+	updateParallax();
+	
 	// Update the scrollbar
-	updateScrollbar(base);
+	updateScrollbar();
+	
+	// Update scroll
+	updateScroll();
+	
 	// Listen for maxScrolls
-	listenFixChange(base);
+	listenFixChange();
 	
 	
 	// Set the fixed variables
@@ -114,17 +97,24 @@ function doScrolling(base) {
 	// fixScroll(base);
 }
 
-function setupBoard(base) {
+function setupBoard() {
 	// Setup the board width
 	$(base).find('.scroll-content .board').width($(window).width()*2);
 }
 
-function setMaxScroll(base) {
+function setMaxScroll() {
 	// Calculate the maximum scroll position
   maxScroll = $(base).find('.scroll-content')[0].scrollHeight;
 }
 
-function updateParallax(base) {
+function updateScrollData() {
+	if (Math.abs($(base).find('.scroll-content').scrollTop() - scrollTop) != deltaY) {
+		deltaY = $(base).find('.scroll-content').scrollTop() - scrollTop;
+		scrollTop = $(base).find('.scroll-content').scrollTop();
+	}
+}
+
+function updateParallax() {
 	// Grab scroll position
   var scrolled = $(base).find('.scroll-content').scrollTop();
 
@@ -136,7 +126,7 @@ function updateParallax(base) {
   $('html').css({ fontSize: (scrolled / maxScroll) * 50 });
 }
 
-function updateScrollbar(base) {
+function updateScrollbar() {
 	var scrollArea = $(base).find('.scroll-content');
 	
 	var left = ($(scrollArea).scrollTop() * $(base).find('.scrollbar').width()) / ($(scrollArea)[0].scrollHeight - $(scrollArea).outerHeight());
@@ -150,63 +140,87 @@ function updateScrollbar(base) {
 	// $(base).find('.scrollbar .current').css('bottom', percent+"%");
 }
 
-function listenFixChange(base) {
+function updateScroll() {
 	var scrollArea 	= $(base).find('.scroll-content');
 	
-	console.log(maxScrollTop);
+	if (yfixed) {
+		if (xScrollDirection == "right") {
+			console.log(deltaY);
+			$(scrollArea).scrollLeft($(scrollArea).scrollLeft() + deltaY*1);
+		} else if (xScrollDirection == "left") {
+			$(scrollArea).scrollLeft($(scrollArea).scrollLeft() - deltaY*1);
+		}
+		
+	}
+}
+
+function listenFixChange() {
+	var scrollArea 	= $(base).find('.scroll-content');
 	
 	if (yfixed) {
 		if ($(scrollArea).scrollLeft() < minScrollLeft) {
-			console.log("lmin!");
 			$(scrollArea).scrollLeft(minScrollLeft);
 			updateFixed(base);
 		}
 		if (($(scrollArea).scrollLeft() > maxScrollLeft)) {
-			console.log("lmax!");
 			$(scrollArea).scrollLeft(maxScrollLeft);
 			updateFixed(base);
 		}
 	}
 	if (xfixed) {
 		if ($(scrollArea).scrollTop() < minScrollTop) {
-			console.log("ymin!");
 			$(scrollArea).scrollTop(minScrollTop);
 			updateFixed(base);
 		}
 		if (($(scrollArea).scrollTop() > maxScrollTop)) {
-			console.log("ymax!");
 			$(scrollArea).scrollTop(maxScrollTop);
 			updateFixed(base);
 		}
 	}
 }
 
-function updateFixed(base) {
+function updateFixed() {
 	var scrollArea 	= $(base).find('.scroll-content');
 	
+	console.log(deltaY);
+	
 	// Get visible elements
-	var visible = getVisibleElements(base, scrollArea);
+	var visible = getVisibleElements(scrollArea);
 	var current = $(visible[0]);
-	var next 		= $(current).next('.element');
+	var next 		= (deltaY >= 0) ? $(current).next('.element') : $(current).prev('.element');
 
-	// if can scroll y
+	// if should scroll y
 	if (shouldScrollY(scrollArea, next)) {
-		// lock x plane
+		console.log("scroll y");
+		// lock x scroll
 		yfixed = false;
 		xfixed = true;
 		// find max and min scroll top
-		minScrollTop = $(current).position().top;
-		maxScrollTop = $(next).position().top;
-	}
-	
-	// if can scroll x
-	if (shouldScrollX(scrollArea, next)) {
-		// lock y plane
+		if ($(current).position().top < $(next).position().top) {
+			minScrollTop = $(current).position().top;
+			maxScrollTop = $(next).position().top;
+		} else {
+			minScrollTop = $(next).position().top;
+			maxScrollTop = $(current).position().top;
+		}
+
+	// if should scroll x
+	} else {
+		console.log("scroll x");
+		// lock y scroll
 		yfixed = true;
 		xfixed = false;
 		// find max and min scroll left
-		minScrollLeft = $(current).position().left;
-		maxScrollLeft = $(next).position().left + $(next).outerWidth();
+		var average = (($(current).position().left + ($(next).position().left + $(next).outerWidth()))/2) - ($(scrollArea).outerWidth()/2);
+		if ($(current).position().left < $(next).position().left) {
+			xScrollDirection = "right";
+			minScrollLeft = $(scrollArea).scrollLeft();
+			maxScrollLeft = average;
+		} else {
+			xScrollDirection = "left";
+			minScrollLeft = average;
+			maxScrollLeft = $(scrollArea).scrollLeft();
+		}
 	}
 	
 	// Fix the scroll direction
@@ -214,7 +228,7 @@ function updateFixed(base) {
 	
 }
 
-function getVisibleElements(base, scrollArea) {
+function getVisibleElements(scrollArea) {
 	var visible 		= [];
 	$(base).find('.element').each(function() {
 		var element = this;
@@ -234,8 +248,8 @@ function shouldScrollY(scrollArea, element) {
 }
 
 function shouldScrollX(scrollArea, element) {
-	return (($(element).position().top >= $(scrollArea).scrollTop()) && 
-	(($(element).position().top + $(element).outerHeight()) <= ($(scrollArea).scrollTop() + $(scrollArea).outerHeight())));
+	return (!shouldScrollY(scrollArea, element) && (($(element).position().top >= $(scrollArea).scrollTop()) && 
+	(($(element).position().top + $(element).outerHeight()) <= ($(scrollArea).scrollTop() + $(scrollArea).outerHeight()))));
 }
 
 
