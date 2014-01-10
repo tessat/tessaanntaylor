@@ -4,10 +4,16 @@
 
 var base;
 
+var scrollEventPrevented = false;
+
 var maxScroll;
 
 var scrollTop;
 var deltaY = 0;
+
+var map 					= [];
+var currentIndex 	= 0;
+
 
 var yfixed = false;
 var xfixed = false;
@@ -29,14 +35,14 @@ $('.pages.index').ready(function() {
 	
 	setupScroll();
 	
-	$(base).find('.scroll-content').on('scroll', function(e) {
+	$(document).on('scroll', function(e) {
 		doScrolling();
 	});
 	
-	$(window).on('resize', function() {
-		setupBoard();
-	});
-	
+	// $(window).on('resize', function() {
+	// 	setupBoard();
+	// });
+
 	
 	
 	// $(base).find('.links').on('scrollstart', function(e) {
@@ -51,79 +57,134 @@ $('.pages.index').ready(function() {
 // ***************
 
 function setupScroll() {
-	// Setup the board
-	setupBoard();
 	
-	// Start scroll at center
-	$(base).find('.scroll-content').scrollLeft($(base).find('.scroll-content')[0].scrollWidth/4);
+	// Create the map
+	var scrollPos = 0;
+	var currentScrollPos;
+	var dir;
+	$('.scroll-content hr').each(function() {
+		currentScrollPos = scrollPos;
+		if ($(this).hasClass('y')) {
+			scrollPos += Math.abs($(this).next('.element').position().top - $(this).prev('.element').position().top);
+			dir = "y";
+		} else if ($(this).hasClass('x')) {
+			scrollPos += Math.abs($(this).next('.element').position().left - $(this).prev('.element').position().left);
+			if ($(this).next('.element').position().left > $(this).prev('.element').position().left) {
+				dir = "right";
+			} else {
+				dir = "left";
+			}
+		}
+		mapObj = {
+			min: currentScrollPos,
+			max: scrollPos,
+			dir: dir
+		}
+		map.push(mapObj);
+	});
 	
-	// Set current scrollTop
-	scrollTop = $(base).find('.scroll-content').scrollTop();
+	// Set the body size
+	var height = $(document).height() + scrollPos;
+	$('body').css('height', height+'px');
+	
+	
+	// Set current scroll
+	scrollTop = $(document).scrollTop();
 	
 	// Set the max scroll
 	setMaxScroll();
 	
-	// Set initial fixed settings
-	updateFixed();
 	
-	// Setup the current scroller
-	$(base).find('.scrollbar .current').css({
-		'left': '5%',
-		'top': '10%'
-	});
+	
+	
+	// // Setup the board
+	// setupBoard();
+	// 
+	// 
+	// // Set current scrollTop and scrollLeft
+	// scrollTop 	= $(base).find('.scroll-content').scrollTop();
+	// scrollLeft 	= $(base).find('.scroll-content').scrollLeft();
+
+	// 
+	// // Set initial fixed settings
+	// updateFixed();
+	// 
+	// // Setup the current scroller
+	// $(base).find('.scrollbar .current').css({
+	// 	'left': '5%',
+	// 	'top': '10%'
+	// });
 	
 }
 
-function doScrolling() {
-	// Update scroll data
+function doScrolling() {	
+	
+	// // Update scroll data
 	updateScrollData();
+
+	
+	// Check for min or max
+	if (scrollTop < map[currentIndex]['min']) {
+		currentIndex -= 1;
+		if (currentIndex < 0) {
+			currentIndex = 0;
+		}
+	}
+	if (scrollTop > map[currentIndex]['max']) {
+		currentIndex += 1;
+		if (currentIndex > (map.length-1)) {
+			currentIndex = map.length-1;
+		}
+	}
+	
+	if (map[currentIndex]['dir'] == 'y') {
+		$(base).find('.scroll-content').css('top', ($(base).find('.scroll-content').position().top - deltaY)+"px");
+	} else if (map[currentIndex]['dir'] == 'right') {
+		$(base).find('.scroll-content').css('left', ($(base).find('.scroll-content').position().left - deltaY)+"px");
+	} else if (map[currentIndex]['dir'] == 'left') {
+		$(base).find('.scroll-content').css('left', ($(base).find('.scroll-content').position().left + deltaY)+"px");
+	}
+
 	
 	// Update the font-size (for parallax)
 	updateParallax();
 	
+	
 	// Update the scrollbar
-	updateScrollbar();
-	
-	// Update scroll
-	updateScroll();
-	
-	// Listen for maxScrolls
-	listenFixChange();
+	// updateScrollbar();
 	
 	
-	// Set the fixed variables
-	// setFixed(base);
-	// Fix(ed position scroll) either x or y if necessary
-	// fixScroll(base);
-}
+	
 
-function setupBoard() {
-	// Setup the board width
-	$(base).find('.scroll-content .board').width($(window).width()*2);
+	// 
+	// // Update scroll
+	// updateScroll();
+	// 
+	// // Listen for maxScrolls
+	// listenFixChange();
+	// 
+	// 
+	// // Set the fixed variables
+	// // setFixed(base);
+	// // Fix(ed position scroll) either x or y if necessary
+	// // fixScroll(base);
 }
 
 function setMaxScroll() {
 	// Calculate the maximum scroll position
-  maxScroll = $(base).find('.scroll-content')[0].scrollHeight;
+  maxScroll = $('body')[0].scrollHeight;
 }
 
 function updateScrollData() {
-	if (Math.abs($(base).find('.scroll-content').scrollTop() - scrollTop) != deltaY) {
-		deltaY = $(base).find('.scroll-content').scrollTop() - scrollTop;
-		scrollTop = $(base).find('.scroll-content').scrollTop();
-	}
+	// Update scrolling variables
+	deltaY 		= $(document).scrollTop() - scrollTop;
+	scrollTop = $(document).scrollTop();
 }
 
 function updateParallax() {
-	// Grab scroll position
-  var scrolled = $(base).find('.scroll-content').scrollTop();
-
-  /**
-   * Calculate our factor, setting it as the root `font-size`.
-   *
-   * Our factor is calculated by multiplying the ratio of the page scrolled by our base factor. The higher the base factor, the larger the parallax effect.
-   */
-  $('html').css({ fontSize: (scrolled / maxScroll) * 50 });
+	// Calculate our factor, setting it as the root `font-size`.
+	// Our factor is calculated by multiplying the ratio of the page scrolled by our base factor. The higher the base factor, the larger the parallax effect.
+  $('html').css({ fontSize: (scrollTop / maxScroll) * 50 });
 }
 
 function updateScrollbar() {
@@ -143,12 +204,11 @@ function updateScrollbar() {
 function updateScroll() {
 	var scrollArea 	= $(base).find('.scroll-content');
 	
-	if (yfixed) {
+	if (yfixed && (scrollDX != scrollDY*2)) {
 		if (xScrollDirection == "right") {
-			console.log(deltaY);
-			$(scrollArea).scrollLeft($(scrollArea).scrollLeft() + deltaY*1);
+			$(scrollArea).scrollLeft($(scrollArea).scrollLeft() + scrollDY*2);
 		} else if (xScrollDirection == "left") {
-			$(scrollArea).scrollLeft($(scrollArea).scrollLeft() - deltaY*1);
+			$(scrollArea).scrollLeft($(scrollArea).scrollLeft() - scrollDY*2);
 		}
 		
 	}
@@ -182,12 +242,12 @@ function listenFixChange() {
 function updateFixed() {
 	var scrollArea 	= $(base).find('.scroll-content');
 	
-	console.log(deltaY);
+	console.log(scrollDY);
 	
 	// Get visible elements
 	var visible = getVisibleElements(scrollArea);
 	var current = $(visible[0]);
-	var next 		= (deltaY >= 0) ? $(current).next('.element') : $(current).prev('.element');
+	var next 		= (scrollDY >= 0) ? $(current).next('.element') : $(current).prev('.element');
 
 	// if should scroll y
 	if (shouldScrollY(scrollArea, next)) {
@@ -286,13 +346,13 @@ function fixScroll(scrollArea) {
 	if (yfixed) {
 		$(scrollArea).css({
 			"overflow-y": "hidden",
-			"overflow-x": "scroll"
+			// "overflow-x": "scroll"
 		});
 	}
 	if (xfixed) {
 		$(scrollArea).css({
 			"overflow-y": "scroll",
-			"overflow-x": "hidden"
+			// "overflow-x": "hidden"
 		});
 	}
 }
