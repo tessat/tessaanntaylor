@@ -26,13 +26,9 @@
 			@include transform('scale(1.1)');
 		}
 		&.grow {
-			height:3000px !important;
-			width:3000px !important;
-			top:-1500px !important;
-			left:-1500px !important;
 			z-index:100;
-			@include border-radius(3000px);
-			@include transition(all, 0.5s, ease-in);
+			@include border-radius(1000px);
+			@include transition(all, 0.5s, linear);
 		}
 	}
 	

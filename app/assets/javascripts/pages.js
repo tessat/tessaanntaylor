@@ -103,6 +103,15 @@ function stopDrag($dot) {
 
 function followLink($dot) {
 	$dot.addClass('grow');
+	var diameter = ($(document).height() > $(document).width()) ? $(document).height() : $(document).width();
+	diameter += (diameter/2);
+	
+	$dot.css({
+		width: diameter + "px",
+		height: diameter + "px",
+		left: 0 - (diameter/4) + "px",
+		top: 0 - (diameter/4) + "px",
+	});
 	
 	setTimeout(function() {
 		$('body').css('background-color', $dot.css('background-color'));
