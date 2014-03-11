@@ -13,8 +13,13 @@ $('.pages.index').ready(function() {
 	
 	initializeDots();
 	
-	$('.dot').on('mousedown vmousedown', function(e) {
+	$('.dot').on('vmousedown', function(e) {
 		startDrag($(this), {x: e.clientX, y: e.clientY});
+	});
+	
+	$('.dot').on('dblclick', function(e) {
+		e.preventDefault();
+		followLink($(this));
 	});
 	
 });
@@ -40,10 +45,10 @@ function initializeDots() {
 		dot.diameter = getRandomInt(50, 100);
 		
 		dot.rgba = {
-			r: getRandomInt(0, 255),
-			g: getRandomInt(0, 255),
-			b: getRandomInt(0, 255),
-			a: 0.5
+			r: getRandomInt(100, 255),
+			g: getRandomInt(100, 255),
+			b: getRandomInt(100, 255),
+			a: 1.0
 		};
 		
 		drawDot(dot);
@@ -68,7 +73,7 @@ function drawDot(dotData) {
 function startDrag($dot, startPoint) {
 	$dot.addClass('up');
 	
-	$(document).on('mousemove vmousemove', function(e) {
+	$(document).on('vmousemove', function(e) {
 		e.preventDefault();
 		var dX = e.clientX - startPoint.x;
 		var dY = e.clientY - startPoint.y;
@@ -84,7 +89,7 @@ function startDrag($dot, startPoint) {
 		};
 	});
 	
-	$(document).on('mouseup vmouseup', function() {
+	$(document).on('vmouseup', function() {
 		stopDrag($dot);
 	});
 }
@@ -93,7 +98,16 @@ function startDrag($dot, startPoint) {
 function stopDrag($dot) {
 	$dot.removeClass('up');
 	
-	$(document).off('mousemove vmousemove mouseup vmouseup');
+	$(document).off('vmousemove vmouseup');
+}
+
+function followLink($dot) {
+	$dot.addClass('grow');
+	
+	setTimeout(function() {
+		$('body').css('background-color', $dot.css('background-color'));
+		$('.dot').hide();
+	},500);
 }
 
 
