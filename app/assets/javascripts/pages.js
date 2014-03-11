@@ -13,7 +13,7 @@ $('.pages.index').ready(function() {
 	
 	initializeDots();
 	
-	$('.dot').on('mousedown', function(e) {
+	$('.dot').on('mousedown vmousedown', function(e) {
 		startDrag($(this), {x: e.clientX, y: e.clientY});
 	});
 	
@@ -68,7 +68,8 @@ function drawDot(dotData) {
 function startDrag($dot, startPoint) {
 	$dot.addClass('up');
 	
-	$(document).on('mousemove', function(e) {
+	$(document).on('mousemove vmousemove', function(e) {
+		e.preventDefault();
 		var dX = e.clientX - startPoint.x;
 		var dY = e.clientY - startPoint.y;
 
@@ -83,7 +84,7 @@ function startDrag($dot, startPoint) {
 		};
 	});
 	
-	$(document).on('mouseup', function() {
+	$(document).on('mouseup vmouseup', function() {
 		stopDrag($dot);
 	});
 }
@@ -92,8 +93,7 @@ function startDrag($dot, startPoint) {
 function stopDrag($dot) {
 	$dot.removeClass('up');
 	
-	$(document).off('mousemove');
-	$(document).off('mouseup');
+	$(document).off('mousemove vmousemove mouseup vmouseup');
 }
 
 
