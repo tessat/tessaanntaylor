@@ -38,6 +38,26 @@
 		height:100%;
 		overflow:hidden;
 		
+		.scrollbar {
+			position:fixed;
+			top:0px;
+			left:0px;
+			padding:1% 1%;
+			z-index:2000;
+			.current {
+				@include background-image-scale('gear.png');
+				display:block;
+				position:relative;
+				top:0px;
+				left:0px;
+				height:25px;
+				width:25px;
+				margin-top:1rem;
+				opacity:0.5;
+				@include transition(all, 0.1s, linear);
+			}
+		}
+		
 		.scroll-content {
 			position:absolute;
 			top:0px;
@@ -48,74 +68,6 @@
 				display:none;
 			}
 		}
-	}
-
-	
-	.hidden-scroll {
-		position:fixed;
-		top:0px;
-		left:0px;
-		width:100%;
-		height:100%;
-		overflow:hidden;
-		
-		// Scrollbar
-		.scrollbar {
-			background:make-rgba(#fff, 0.5);
-			position:fixed;
-			bottom:0px;
-			left:0px;
-			height:10%;
-			width:100%;
-			padding:0px;
-			z-index:2000;
-			display:none;
-
-			.current {
-				display:block;
-				@include circle(14px);
-				background:#fff;
-				position:absolute;
-				top:0px;
-				left:0px;
-				margin:0px;
-				border:2px solid make-rgba(#333, 0.8);
-				z-index:2001;
-
-				@include transition(all, 0.05s, linear);
-			}
-			hr {
-				display:inline-block;
-				float:left;
-				margin:0px;
-				padding:0px;
-				border:none;
-				position:relative;
-				background:make-rgba(#333, 0.6);
-				&.y {
-					height:2px;
-				}
-				&.x {
-					width:2px;
-				}
-			}
-		}
-		
-		.scroll-content {
-			position:absolute;
-			top:0px;
-			left:0px;
-			width:100%;
-			height:100%;
-			overflow:scroll;
-//			overflow-y:scroll;
-//			overflow-x:hidden;
-			
-			.board {
-				position:relative;
-				padding-bottom:40px;
-			}
-		}	
 	}
 	
 	.elements {
@@ -172,6 +124,40 @@
 					bottom:11%;
 				}
 			}
+			&.spacer {
+				left:-20%;
+			}
+		}
+	}
+	
+	.social {
+		background:#fff;
+		position:fixed;
+		bottom:-100%;
+		left:0px;
+		width:90%;
+		padding:60px 5%;
+		@include box-shadow('inset', 0px, 8px, 5px, -5px, #333);
+		@include transition(all, 0.5s, ease-in);
+		&:after {
+			content:"";
+			@extend .clearfix;
+		}
+		a {
+			display:inline-block;
+			@include circle(150px);
+			float:left;
+			background:#aaa;
+			margin:0px 4%;
+		}
+	}
+	
+	.custom-scroll.end-scroll {
+		.scrollbar .current {
+			@include transition(top, 1.0s, cubic-bezier(1, -0.05, 1, 1));
+		}
+		.scroll-content, .social {
+			@include transition(all, 0.5s, linear);
 		}
 	}
 	

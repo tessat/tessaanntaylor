@@ -32,6 +32,11 @@ $('.pages.index').ready(function() {
 		setupScroll();
 	});
 	
+	$(base).on('scrollEnd', function() {
+		doScrollEnd();
+	});
+	
+	
 });
 
 // ***************
@@ -44,7 +49,7 @@ function setupScroll() {
 	createMap();
 
 	// Set the body size
-	$('body').css('height', maxScroll+'px');
+	$('body').css('height', maxScroll + $(document).height() + 10 +'px');
 	
 	// Set current scroll
 	scrollTop = $(document).scrollTop();
@@ -69,7 +74,34 @@ function doScrolling() {
 	updateScroll();
 	
 	// Update the scrollbar
-	// updateScrollbar();
+	updateScrollbar();
+	
+}
+
+function doScrollEnd() {
+	
+	// Setup end scrolling
+	$(base).find('.custom-scroll').addClass('end-scroll');
+	
+	// Drop the scroller
+	$(base).find('.scrollbar .current').css('top', $(document).height() + 'px');
+	
+	// Get height
+	var distance = parseInt($(base).find('.social').css('bottom').replace("px", ""));
+	
+	setTimeout(function() {
+		
+		// Move up the scroll area
+		$(base).find('.scroll-content').css('top', $(base).find('.scroll-content').position().top + distance + "px");
+
+		// Move up the social area
+		$(base).find('.social').css('bottom', "0px");
+		
+	},1100);
+	
+}
+
+function undoScrollEnd() {
 	
 }
 
@@ -115,7 +147,7 @@ function createMap() {
 }
 
 function checkMap() {
-	// Check for min or max
+	// Check for min 
 	if (scrollTop < map[currentIndex]['min']) {
 		$(document).scrollTop(map[currentIndex]['min'] - 1);
 		currentIndex -= 1;
@@ -123,11 +155,13 @@ function checkMap() {
 			currentIndex = 0;
 		}
 	}
+	// Check for max
 	if (scrollTop > map[currentIndex]['max']) {
 		$(document).scrollTop(map[currentIndex]['max'] + 1);
 		currentIndex += 1;
 		if (currentIndex > (map.length-1)) {
 			currentIndex = map.length-1;
+			$(base).trigger('scrollEnd');
 		}
 	}
 }
@@ -149,17 +183,18 @@ function updateParallax() {
 }
 
 function updateScrollbar() {
-	var scrollArea = $(base).find('.scroll-content');
-	
-	var left = ($(scrollArea).scrollTop() * $(base).find('.scrollbar').width()) / ($(scrollArea)[0].scrollHeight - $(scrollArea).outerHeight());
-	
-	// Calculate the y precentage scrolled
-	var percent = ($(scrollArea).scrollTop() / ($(scrollArea)[0].scrollHeight - $(scrollArea).outerHeight())) * 100;
-	$(base).find('.scrollbar .current').css('left', percent+"%");
-	
-	// Calculate the x precentage scrolled
-	var percent = ($(scrollArea).scrollLeft() / ($(scrollArea)[0].scrollWidth - $(scrollArea).outerWidth())) * 100;
-	// $(base).find('.scrollbar .current').css('bottom', percent+"%");
+	$(base).find('.scrollbar .current').css({
+		'-webkit-transform': 'rotate('+scrollTop+'deg)',
+	     '-moz-transform': 'rotate('+scrollTop+'deg)', 
+	      '-ms-transform': 'rotate('+scrollTop+'deg)', 
+	       '-o-transform': 'rotate('+scrollTop+'deg)',
+	          'transform': 'rotate('+scrollTop+'deg)',
+	});
+	if (map[currentIndex]['dir'] == 'right') {
+		$(base).find('.scrollbar .current').css('left', $(base).find('.scrollbar .current').position().left - (deltaY/1000) + "px");
+	} else if (map[currentIndex]['dir'] == 'left') {
+		$(base).find('.scrollbar .current').css('left', $(base).find('.scrollbar .current').position().left + (deltaY/1000) + "px");
+	}
 }
 
 
