@@ -22,13 +22,15 @@ $('.pages.index').ready(function() {
 		e.preventDefault();
 	});
 	
-	$('.dot').on('vmousedown', function(e) {
-		startDrag($(this), {x: e.clientX, y: e.clientY});
-	});
 	
-	$('.dot').on('dblclick', function(e) {
+	$('a.redraw').on('click', function(e) {
 		e.preventDefault();
-		followLink($(this));
+		
+		$('a.redraw').fadeOut(100);
+		$('.dot').remove();
+		initializeDots();
+		
+		return false;
 	});
 	
 });
@@ -60,6 +62,15 @@ function initializeDots() {
 	
 	// Layout dots
 	layoutDots();
+	
+	$('.dot').on('vmousedown', function(e) {
+		startDrag($(this), {x: e.clientX, y: e.clientY});
+	});
+	
+	$('.dot').on('dblclick', function(e) {
+		e.preventDefault();
+		followLink($(this));
+	});
 	
 }
 
@@ -276,7 +287,15 @@ function resolveColision($originalDot, $collideDot) {
 		$originalDot.removeClass('merging');
 		$originalDot.removeClass('od');
 		$collideDot.remove();
+		
+		checkSingleDot();
 	},500);
+}
+
+function checkSingleDot() {
+	if ($('.dot').length == 1) {
+		$('a.redraw').fadeIn();
+	}
 }
 
 
