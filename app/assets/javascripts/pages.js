@@ -18,6 +18,10 @@ $('.pages.index').ready(function() {
 		layoutDots();
 	});
 	
+	$(document).on('vmousemove', function(e) {
+		e.preventDefault();
+	});
+	
 	$('.dot').on('vmousedown', function(e) {
 		startDrag($(this), {x: e.clientX, y: e.clientY});
 	});
@@ -101,7 +105,6 @@ function startDrag($dot, startPoint) {
 	var collided 		= [];
 	$(document).on('vmousemove', function(e) {
 		e.preventDefault();
-		
 		
 		// Move with drag
 		
@@ -278,10 +281,14 @@ function resolveColision($originalDot, $collideDot) {
 
 
 function oscillateColor($overlap, rgb1, rgb2) {
+	$overlap.css('background-color', rgb2);
+	setTimeout(function() {
+		$overlap.css('background-color', rgb1);
+	},1000);
 	var inter = setInterval(function() {
-		$overlap.css('background', rgb1);
+		$overlap.css('background', rgb2);
 		setTimeout(function() {
-			$overlap.css('background-color', rgb2);
+			$overlap.css('background-color', rgb1);
 		},1000);
 	},2000);
 	inters.push(inter);

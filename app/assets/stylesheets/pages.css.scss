@@ -45,7 +45,7 @@
 		.overlap {
 			position:absolute;
 			@include border-radius(200px);
-			@include transition(background-color, 2.0s, linear);
+			@include transition(background-color, 1.5s, linear);
 		}
 	}
 	
