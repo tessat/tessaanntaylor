@@ -19,6 +19,13 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function arrayUnion(array1, array2) {
+	var newArray = [];
+	$.merge($.merge(newArray, array1), array2);
+	$.unique(newArray);
+	return newArray;
+}
+
 jQuery.event.special.dblclick = {
 	setup: function(data, namespaces) {
 		var elem 	= this,
