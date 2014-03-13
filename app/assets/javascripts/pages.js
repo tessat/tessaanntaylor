@@ -44,7 +44,7 @@ function initializeDots() {
 	var count = parseInt(($(window).height() + $(window).width())/75)
 
 	// Create and draw dots
-	for (i=0; i<count; i++) {
+	for (var i=0; i<count; i++) {
 		var dot = {};
 		
 		dot.iD = "dot"+i;
@@ -138,7 +138,7 @@ function startDrag($dot, startPoint) {
 		var oldCollided = collided;
 		collided 		= findCollisions($dot);
 		var union 	= arrayUnion(oldCollided, collided);
-		for (i=0; i<union.length; i++) {
+		for (var i=0; i<union.length; i++) {
 			// Collide 
 			if ((oldCollided.indexOf(union[i]) == -1) && (collided.indexOf(union[i]) > -1)) {
 				collide($dot, $('#'+union[i]));
@@ -163,7 +163,7 @@ function stopDrag($dot, collided) {
 	$(document).off('vmousemove vmouseup');
 	
 	// Collision resolution
-	for (i=0;i<collided.length;i++) {
+	for (var i=0;i<collided.length;i++) {
 		resolveColision($dot, $('#'+collided[i]));
 	}
 }
@@ -246,8 +246,9 @@ function uncollide($originalDot, $collideDot) {
 }
 
 function resolveColision($originalDot, $collideDot) {
+	console.log($collideDot);
 	uncollide($originalDot, $collideDot);
-	for(i=0;i<inters.length;i++) {
+	for (var i=0;i<inters.length;i++) {
 		clearInterval(inters[i]);
 	}
 	// Calculate background color 
@@ -262,9 +263,9 @@ function resolveColision($originalDot, $collideDot) {
 	var diameter = (parseFloat($collideDot.css('width').replace('px', '')) + parseFloat($originalDot.css('width').replace('px', '')))/2;
 	
 	// Calculate position
-	var top 	= (parseFloat($collideDot.css('top').replace('px', '')) + parseFloat($originalDot.css('top').replace('px', '')))/2;
-	var left 	= (parseFloat($collideDot.css('left').replace('px', '')) + parseFloat($originalDot.css('left').replace('px', '')))/2;
-
+	var top		= parseFloat($originalDot.css('top').replace('px', ''));
+	var left	= parseFloat($originalDot.css('left').replace('px', ''));
+	
 	$originalDot.addClass('merging');
 	$originalDot.addClass('od');
 	$originalDot.css({
