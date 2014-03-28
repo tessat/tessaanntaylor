@@ -1,4 +1,4 @@
-var KatieDots = function($){
+var StefDots = function($){
   var _this = this;
 
   // Called on instantiation
@@ -20,10 +20,11 @@ var KatieDots = function($){
 
   		dot.diameter = getRandomInt(20, 100);
 
+      var c = getRandomInt(10, 200);
   		dot.rgb = {
-  			r: getRandomInt(0, 150),
-  			g: getRandomInt(150, 255),
-  			b: getRandomInt(0, 150)
+  			r: getRandomInt(c-10, c+10),
+  			g: getRandomInt(0, 10),
+  			b: getRandomInt(c-10, c+10)
   		};
   		
   		dotData.push(dot);
@@ -36,19 +37,15 @@ var KatieDots = function($){
     var msgs = [
       {
         iD: 'msg-1',
-        texT: "That"
+        texT: "Great"
       },
       {
         iD: 'msg-2',
-        texT: "was"
+        texT: "job"
       },
       {
         iD: 'msg-3',
-        texT: "totally"
-      },
-      {
-        iD: 'msg-4',
-        texT: "#pbserious"
+        texT: "pal!"
       },
     ];
   	

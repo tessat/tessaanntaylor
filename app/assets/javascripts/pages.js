@@ -12,7 +12,7 @@ $('.pages.index').ready(function($) {
    e.preventDefault();
    
    $('a.redraw').fadeOut(100);
-   $('.dot').remove();
+   $('.dots-container').html("");
    window.dots = getDots();
    
    return false;
@@ -35,6 +35,9 @@ function getDots() {
       break;
     case "#tej":
       return new TejDots($);
+      break;
+    case "#stef":
+      return new StefDots($);
       break;
     default:
       return new BasicDots($);

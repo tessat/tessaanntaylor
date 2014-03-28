@@ -1,4 +1,4 @@
-var BasicDots = function($, generateDotData){
+var BasicDots = function($, generateDotData, onCompleted){
   var _this = this;
   
   // ***************
@@ -21,6 +21,10 @@ var BasicDots = function($, generateDotData){
 
   	$(document).on('vmousemove', function(e) {
   		e.preventDefault();
+  	});
+  	
+  	$('.dots-container').on('completed', function() {
+  	  onCompleted();
   	});
   }
 
@@ -48,6 +52,11 @@ var BasicDots = function($, generateDotData){
   		dotData.push(dot);
   	}
   	return dotData;
+  };
+  
+  
+  var onCompleted = onCompleted || function() {
+    $('a.redraw').fadeIn();
   };
   
   
@@ -249,7 +258,7 @@ var BasicDots = function($, generateDotData){
   
   
   var resolveColision = function($originalDot, $collideDot) {
-  	uncollide($originalDot, $collideDot);
+  	$originalDot.find('.overlap').remove();
   	for (var i=0;i<inters.length;i++) {
   		clearInterval(inters[i]);
   	}
@@ -293,13 +302,15 @@ var BasicDots = function($, generateDotData){
 
   		checkSingleDot();
   	},500);
-  }
+  };
+  
   
   var checkSingleDot = function() {
   	if ($('.dot').length == 1) {
-  		$('a.redraw').fadeIn();
+  		$('.dots-container').trigger('completed');
   	}
-  }
+  };
+  
   
   var oscillateColor = function($overlap, rgb1, rgb2) {
   	$overlap.css('background-color', rgb2);
