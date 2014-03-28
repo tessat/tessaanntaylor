@@ -74,9 +74,10 @@ var StefDots = function($){
     var top 	    = getRandomInt(10, h-110);
 		var left 	    = getRandomInt(10, w-110);
 		var fontSize  = getRandomInt(20, 100);
-		var r         = getRandomInt(0, 150);
-		var g         = getRandomInt(150, 255);
-		var b         = getRandomInt(0, 150);
+		var c         = getRandomInt(10, 200);
+		var r         = getRandomInt(c-10, c+10);
+		var g         = getRandomInt(0, 10);
+		var b         = getRandomInt(c-10, c+10);
 		
 		$msg.css({
 		  top: top,
