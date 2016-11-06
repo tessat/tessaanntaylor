@@ -55,6 +55,41 @@ a, a:hover, a:visited, a:active {
 	color:#333;
 }
 
+// **
+// Header
+// **
+
+header {
+  position:fixed;
+  top:0px;
+  left:0px;
+  padding:2px 5px;
+  font-family:helvetica, arial, sans-serif;
+  @include transition(all, 0.2s, linear);
+  
+  ul {
+    list-style:none;
+    li {
+      display:inline-block;
+      a {
+        display:inline-block;
+        padding:3px 6px;
+        opacity:0.6;
+        &:hover {
+          opacity:1.0;
+          border-bottom:1px solid #aaa;
+        }
+      }
+    }
+  }
+  
+  &:hover, &.hidden:hover {
+    opacity:1.0;
+  }
+  &.hidden {
+    opacity:0.0;
+  }
+}
 
 
 

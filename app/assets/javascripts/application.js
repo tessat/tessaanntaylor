@@ -11,8 +11,19 @@
 // about supported directives.
 //
 //= require jquery_ujs
-//= require turbolinks
 //= require_tree .
+
+// On body load
+$('body').ready(function($) {
+  
+  // Fade out header on non-index pages
+  if (!$('body').hasClass('index')) {
+    setTimeout(function() {
+      $('header').addClass('hidden');
+    }, 2000);    
+  }
+  
+});
 
 
 function getRandomInt(min, max) {

@@ -1,23 +1,22 @@
-development:
-  adapter: mysql
-  database: tessaanntaylor_development
+# PostgreSQL. Versions 8.2 and up are supported.
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: tessa
+  password:
   host: localhost
-  username: root
-  password: 
-  timeout: 5000
+  port: 5432
+
+development:
+  <<: *default
+  database: tessaanntaylor_development
 
 test:
-  adapter: mysql
+  <<: *default
   database: tessaanntaylor_test
-  host: localhost
-  username: root
-  password: 
-  timeout: 5000
-
-production:
-  adapter: postgresql
+  
+test:
+  <<: *default
   database: tessaanntaylor_production
-  host: localhost
-  username: root
-  password: 
-  timeout: 5000

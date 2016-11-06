@@ -2,11 +2,15 @@
 // Events
 // ***************
 
-
+// Init index page
 $('.pages.index').ready(function($) {
+  new Marquee($);
+});
+
+// Init dots page
+$('.pages.dots').ready(function($) {
   
   window.dots = getDots();
- 
  
  $('a.redraw').on('click', function(e) {
    e.preventDefault();

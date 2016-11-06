@@ -11,6 +11,43 @@
 // **
 
 .pages.index {
+  header .home {
+    border-bottom:1px solid #aaa;
+  }
+  
+  marquee {
+    position:relative;
+    
+    &.left {
+      @include transform(rotate(180deg));
+    }
+    &.bottom {
+      @include transform(rotate(90deg));
+    }
+    &.top {
+      @include transform(rotate(270deg));
+    }
+    &.bottom-right {
+      @include transform(rotate(45deg));
+    }
+    &.bottom-left {
+      @include transform(rotate(135deg));
+    }
+    
+    .line {
+      content:'';
+      background:#000;
+      display:inline-block;
+      height:5px;
+      width:50px;
+    }
+  }
+}
+
+.pages.dots {
+  header .dots {
+    border-bottom:1px solid #aaa;
+  }
 	overflow:hidden;
 	
 	a.redraw {
