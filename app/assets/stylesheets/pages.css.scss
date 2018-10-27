@@ -11,45 +11,45 @@
 // **
 
 .pages.index {
-  header .home {
-    border-bottom:1px solid #aaa;
-  }
-  
-  marquee {
-    position:relative;
-    
-    &.left {
-      @include transform(rotate(180deg));
-    }
-    &.bottom {
-      @include transform(rotate(90deg));
-    }
-    &.top {
-      @include transform(rotate(270deg));
-    }
-    &.bottom-right {
-      @include transform(rotate(45deg));
-    }
-    &.bottom-left {
-      @include transform(rotate(135deg));
-    }
-    
-    .line {
-      content:'';
-      background:#000;
-      display:inline-block;
-      height:5px;
-      width:50px;
-    }
-  }
+	header .home {
+		border-bottom:1px solid #aaa;
+	}
+
+	marquee {
+		position:relative;
+
+		&.left {
+			@include transform(rotate(180deg));
+		}
+		&.bottom {
+			@include transform(rotate(90deg));
+		}
+		&.top {
+			@include transform(rotate(270deg));
+		}
+		&.bottom-right {
+			@include transform(rotate(45deg));
+		}
+		&.bottom-left {
+			@include transform(rotate(135deg));
+		}
+
+		.line {
+			content:'';
+			background:#000;
+			display:inline-block;
+			height:5px;
+			width:50px;
+		}
+	}
 }
 
 .pages.dots {
-  header .dots {
-    border-bottom:1px solid #aaa;
-  }
+	header .dots {
+		border-bottom:1px solid #aaa;
+	}
 	overflow:hidden;
-	
+
 	a.redraw {
 		display:block;
 		position:fixed;
@@ -62,14 +62,14 @@
 		font-size:30px;
 		display:none;
 	}
-	
+
 	.dot {
 		top:-100px;
 		position:absolute;
 		overflow:hidden;
 		cursor: pointer;
 		cursor: hand;
-		
+
 		@include border-radius(200px);
 		@include box-shadow('', 0px, 0px, 2px, 0px, rgba(0,0,0,0.05));
 		&:after {
@@ -99,11 +99,65 @@
 			@include transition(background-color, 1.5s, linear);
 		}
 	}
-	
+
 	.msg {
-	  position:fixed;
-	  z-index:200;
-	  text-shadow:0px 0px 2px rgba(100, 100, 100, 0.5);
+		position:fixed;
+		z-index:200;
+		text-shadow:0px 0px 2px rgba(100, 100, 100, 0.5);
 	}
-	
+
+}
+
+
+
+.pages.font {
+	.font-container {
+		font-family:helvetica, arial, sans-serif;
+		font-size: 100px;
+		cursor: vertical-text;
+
+		span {
+			display: inline-block;
+			width: 40px;
+			text-align: center;
+			cursor: text;
+		}
+	}
+
+	.b {
+		font-weight:bold;
+	}
+
+	.i {
+		font-style: italic;
+	}
+
+	.o {
+		text-decoration: overline;
+	}
+
+	.s {
+		text-decoration: line-through;
+	}
+
+	.u {
+		text-decoration: underline;
+	}
+
+	.o.s {
+		text-decoration: overline line-through;
+	}
+
+	.o.s.u {
+		text-decoration: overline line-through underline;
+	}
+
+	.s.u {
+		text-decoration: line-through underline;
+	}
+
+	.o.u {
+		text-decoration: overline underline;
+	}
+
 }

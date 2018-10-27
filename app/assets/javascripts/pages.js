@@ -24,6 +24,11 @@ $('.pages.dots').ready(function($) {
 
 });
 
+// Init font page
+$('.pages.font').ready(function($) {
+  new Font($);
+});
+
 // ***************
 // Functions
 // ***************

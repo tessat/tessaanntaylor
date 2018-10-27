@@ -4,4 +4,7 @@ class PagesController < ApplicationController
   
   def dots
   end
+
+  def font
+  end
 end
