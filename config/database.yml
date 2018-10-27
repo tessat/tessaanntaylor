@@ -17,6 +17,6 @@ test:
   <<: *default
   database: tessaanntaylor_test
   
-test:
+production:
   <<: *default
   database: tessaanntaylor_production
