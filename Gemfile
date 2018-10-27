@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.0.0"
+ruby "2.3.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.6'
@@ -42,7 +42,7 @@ group :development do
   # gem 'dotenv-rails'
   
   # Use debugger
-  gem 'debugger'
+  # gem 'debugger'
 end
 
 group :production do
