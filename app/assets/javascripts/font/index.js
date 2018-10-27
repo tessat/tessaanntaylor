@@ -78,9 +78,10 @@ var Font = function($, onCompleted){
     setupEvents($elem);
 
     // Make the spacing + font size arbitrary
-    var leftMargin = getRandomInt(50, 400);
+    var leftMargin = getRandomInt(2, 30);
     var fontSize = getRandomInt(50, 200);
-    $elem.css({'marginLeft': leftMargin+"px", 'fontSize': fontSize+"%"});
+    var color = getRandomInt(0, 140);
+    $elem.css({'marginLeft': leftMargin+"%", 'fontSize': fontSize+"%", 'color': "rgb("+color+","+color+","+color+")"});
   }
 
   var setupEvents = function($elem) {
