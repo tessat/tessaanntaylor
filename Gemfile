@@ -4,7 +4,7 @@ ruby "2.4.5"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.8'
 # Use postgresql as the database for Active Record
-gem 'pg'
+gem 'pg', '~> 0.15'
 # Bourbon mixin library
 gem 'bourbon'
 # Use SCSS for stylesheets
